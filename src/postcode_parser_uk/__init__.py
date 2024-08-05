@@ -3,7 +3,7 @@ from .parser.handlers import (
     RegexParsingHandler,
     OSDataHubNamesAPIParsingHandler,
     PostcodesIOAPIParsingHandler,
-    ONSPDCsvFileParsingHandler,
+    ONSPDCSVFileParsingHandler,
 )
 from .postcode import UKPostCode, SpecialUKPostCode
 from .result import Result
@@ -17,7 +17,7 @@ __all__ = [
     "RegexParsingHandler",
     "OSDataHubNamesAPIParsingHandler",
     "PostcodesIOAPIParsingHandler",
-    "ONSPDCsvFileParsingHandler",
+    "ONSPDCSVFileParsingHandler",
     "UKPostCode",
     "SpecialUKPostCode",
     "Result",

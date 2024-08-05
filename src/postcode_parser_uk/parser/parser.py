@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Optional, Union, List, Dict
 from .handlers.handler import ParsingHandler
 from .handlers.regex import RegexParsingHandler
 from .handlers.third_party_api import (
@@ -6,7 +6,7 @@ from .handlers.third_party_api import (
     PostcodesIOAPIParsingHandler,
 )
 
-from .handlers.onspd_csv_file import ONSPDCsvFileParsingHandler
+from .handlers.onspd_csv_file import ONSPDCSVFileParsingHandler
 from .handlers.types import ParingHandlerType
 from ..postcode import UKPostCode, SpecialUKPostCode
 from ..result import Result
@@ -25,8 +25,8 @@ class UkPostcodeParser:
         -> Result[Union[UKPostCode, SpecialUKPostCode, None]]:
         Parse a single postcode using the specified handler.
 
-        parse_batch(postcodes: list[str], handler_type: str = ParingHandlerType.REGEX.value)
-        -> list[Result[Union[UKPostCode, SpecialUKPostCode, None]]]:
+        parse_batch(postcodes: List[str], handler_type: str = ParingHandlerType.REGEX.value)
+        -> List[Result[Union[UKPostCode, SpecialUKPostCode, None]]]:
         Parse a batch of postcodes using the specified handler.
     """
 
@@ -35,13 +35,13 @@ class UkPostcodeParser:
         osdatahub_api_key: Optional[str] = None,
         onspd_zip_file_path: Optional[str] = None,
     ):
-        self._handlers: dict[str, ParsingHandler] = {
+        self._handlers: Dict[str, ParsingHandler] = {
             ParingHandlerType.REGEX.value: RegexParsingHandler(),
             ParingHandlerType.OSDATAHUB_API.value: OSDataHubNamesAPIParsingHandler(
                 api_key=osdatahub_api_key
             ),
             ParingHandlerType.POSTCODESIO_API.value: PostcodesIOAPIParsingHandler(),
-            ParingHandlerType.ONSPD_EXCEL_FILE.value: ONSPDCsvFileParsingHandler(
+            ParingHandlerType.ONSPD_EXCEL_FILE.value: ONSPDCSVFileParsingHandler(
                 path=onspd_zip_file_path
             ),
         }
@@ -64,18 +64,18 @@ class UkPostcodeParser:
         return handler.parse(postcode)
 
     def parse_batch(
-        self, postcodes: list[str], handler_type: str = ParingHandlerType.REGEX.value
-    ) -> list[Result[Union[UKPostCode, SpecialUKPostCode, None]]]:
+        self, postcodes: List[str], handler_type: str = ParingHandlerType.REGEX.value
+    ) -> List[Result[Union[UKPostCode, SpecialUKPostCode, None]]]:
         """
         Parse a batch of postcodes using the specified handler.
 
         Args:
-            postcodes (list[str]): A list of postcodes to be parsed.
+            postcodes (List[str]): A List of postcodes to be parsed.
             handler_type (str): The type of handler to use for parsing. Default is 'regex'.
             Other options are 'osdatahub_api', 'postcodesio_api', 'onspd_excel_file'.
 
         Returns:
-            list[Result[Union[UKPostCode, SpecialUKPostCode, None]]]: A list of results for each parsed postcode.
+            List[Result[Union[UKPostCode, SpecialUKPostCode, None]]]: A List of results for each parsed postcode.
         """
         return [self.parse(postcode, handler_type) for postcode in postcodes]
 

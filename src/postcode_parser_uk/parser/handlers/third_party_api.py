@@ -1,6 +1,6 @@
 import os
 from abc import abstractmethod
-from typing import Optional
+from typing import Optional, Dict
 
 import requests
 from dotenv import load_dotenv
@@ -48,7 +48,7 @@ class ThirdPartyAPIParsingHandler(ParsingHandler):
         except Exception as e:
             return Result.failure(error=e)
 
-    def _send_request(self, request: dict) -> requests.Response:
+    def _send_request(self, request: Dict) -> requests.Response:
         """Send the API request."""
         response = requests.get(
             request["url"],
@@ -64,11 +64,11 @@ class ThirdPartyAPIParsingHandler(ParsingHandler):
         return response
 
     @abstractmethod
-    def _create_request(self, postcode: str) -> dict:
+    def _create_request(self, postcode: str) -> Dict:
         """Create the request for the API."""
 
     @abstractmethod
-    def _parse_response(self, data: dict) -> str:
+    def _parse_response(self, data: Dict) -> str:
         """Extract postcode from the API response."""
 
 
@@ -103,7 +103,7 @@ class OSDataHubNamesAPIParsingHandler(ThirdPartyAPIParsingHandler):
             self._api_key = self._load_key_from_env()
         return self._api_key
 
-    def _create_request(self, postcode: str) -> dict:
+    def _create_request(self, postcode: str) -> Dict:
         """Create the request for the OS Data Hub API."""
         return {
             "url": self._endpoint,
@@ -113,7 +113,7 @@ class OSDataHubNamesAPIParsingHandler(ThirdPartyAPIParsingHandler):
             },
         }
 
-    def _send_request(self, request: dict) -> requests.Response:
+    def _send_request(self, request: Dict) -> requests.Response:
         """Send the API request."""
         try:
             return super()._send_request(request)
@@ -122,7 +122,7 @@ class OSDataHubNamesAPIParsingHandler(ThirdPartyAPIParsingHandler):
                 message="Access to the OS Data Hub Names API is forbidden. Please check your API key."
             )
 
-    def _parse_response(self, data: dict) -> str:
+    def _parse_response(self, data: Dict) -> str:
         """Extract the postcode from the API response."""
         try:
             results = data["results"]
@@ -164,11 +164,11 @@ class PostcodesIOAPIParsingHandler(ThirdPartyAPIParsingHandler):
     def __init__(self, timeout: int = 5):
         super().__init__("https://api.postcodes.io/postcodes", timeout)
 
-    def _create_request(self, postcode: str) -> dict:
+    def _create_request(self, postcode: str) -> Dict:
         """Create the request for the Postcodes.io API."""
         return {"url": f"{self._endpoint}/{postcode}"}
 
-    def _parse_response(self, data: dict) -> str:
+    def _parse_response(self, data: Dict) -> str:
         """Extract the postcode from the API response."""
         try:
             result = data["result"]

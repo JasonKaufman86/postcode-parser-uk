@@ -9,9 +9,9 @@ The UK Postcodes Library is a comprehensive Python library designed to handle UK
 
 ## How to Install
 
-### Using PIP
+### Using PyPI
 
-The easiest way to install the UK Postcodes Library is by using PIP:
+The easiest way to install the UK Postcodes Library is by using PyPI:
 
 ```bash
 pip install postcode_parser_uk
@@ -31,8 +31,8 @@ pip install path_to_whl_file.whl
 1. Clone the repository:
 
 ```bash
-git clone URL_TO_REPOSITORY
-cd REPOSITORY_NAME
+git clone https://github.com/JasonKaufman86/postcode-parser-uk
+cd postcode-parser-uk
 ```
 
 2. Install the dependencies:
@@ -89,7 +89,7 @@ The UK Postcodes Library provides several handlers for parsing UK postcodes:
 - `RegexParsingHandler`: Uses regular expressions to parse standard and special UK postcodes.
 - `OSDataHubNamesAPIParsingHandler`: Uses the OS Data Hub Names API to parse UK postcodes.
 - `PostcodesIOAPIParsingHandler`: Uses the Postcodes.io API to parse UK postcodes.
-- `ONSPDCsvFileParsingHandler`: Uses the ONSPD CSV file to parse UK postcodes.
+- `ONSPDCSVFileParsingHandler`: Uses the ONSPD CSV file to parse UK postcodes.
 
 ### RegexParsingHandler
 
@@ -196,14 +196,14 @@ parsed_postcode = result.value
 
 #### Description
 
-The `ONSPDCsvFileParsingHandler` uses a ONSPD CSV file to parse UK postcodes. The handler requires the path to the zipped ONSPD CSV file. These files can be downloaded from the website: [ONS Geoportal](https://geoportal.statistics.gov.uk/search?collection=Datasets). For example, [ONS Postcode Directory (May 2024)](https://geoportal.statistics.gov.uk/datasets/a8a2d8d31db84ceea45b261bb7756771/about). When using the file, keep the file zipped and provide the path to the zipped file. This handler is useful for parsing postcodes offline without the need for an internet connection.
+The `ONSPDCSVFileParsingHandler` uses a ONSPD CSV file to parse UK postcodes. The handler requires the path to the zipped ONSPD CSV file. These files can be downloaded from the website: [ONS Geoportal](https://geoportal.statistics.gov.uk/search?collection=Datasets). For example, [ONS Postcode Directory (May 2024)](https://geoportal.statistics.gov.uk/datasets/a8a2d8d31db84ceea45b261bb7756771/about). When using the file, keep the file zipped and provide the path to the zipped file. This handler is useful for parsing postcodes offline without the need for an internet connection.
 
 #### Example
 
 ```python
-from postcode_parser_uk import ONSPDCsvFileParsingHandler
+from postcode_parser_uk import ONSPDCSVFileParsingHandler
 
-onspd_excel_file_handler = ONSPDCsvFileParsingHandler(path="path_to_zipped_onspd_csv_file_here")
+onspd_excel_file_handler = ONSPDCSVFileParsingHandler(path="path_to_zipped_onspd_csv_file_here")
 
 # Parse a single postcode using the ONSPD CSV file handler
 # Postcodes are normalized before parsing (whitespace stripped, converted to uppercase)
@@ -244,6 +244,11 @@ result = parser.parse("SW1W 0NY")
 
 # To use other handlers, specify the handler type when calling the parse method
 # Handler types: 'regex', 'osdatahub_api', 'postcodesio_api', 'onspd_excel_file'
+# regex_handler_result = parser.parse("SW1W 0NY", handler_type='regex')
+# osdatahub_api_handler_result = parser.parse("SW1W 0NY", handler_type='osdatahub_api')
+# postcodesio_api_handler_result = parser.parse("SW1W 0NY", handler_type='postcodesio_api')
+# onspd_excel_file_handler_result = parser.parse("SW1W 0NY", handler_type='onspd_excel_file')
+
 # If not specified the handler type will default to "regex"
 result = parser.parse("SW1W 0NY", handler_type='osdatahub_api')
 
